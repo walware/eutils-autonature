@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="de.walware.eutils.autonature"
+      label="Auto Project Configuration"
+      version="0.1.0.qualifier"
+      provider-name="WalWare.de"
+      license-feature="de.walware.opensource.license"
+      license-feature-version="1.0.0">
+
+   <description url="http://www.walware.de/goto/statet">
+      Utility to configure projects (natures) automatically dependent on content types of files.
+   </description>
+
+   <copyright>
+      Copyright (c) 2014 Stephan Wahlbrink and others. All rights reserved.
+   </copyright>
+
+   <license url="%license_url">
+      %license_text
+   </license>
+
+   <plugin
+         id="de.walware.eutils.autonature"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

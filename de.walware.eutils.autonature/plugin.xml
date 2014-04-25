@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<!--
+ #=============================================================================#
+ # Copyright (c) 2007-2014 WalWare/Stephan Wahlbrink (www.walware.de).
+ # All rights reserved. This program and the accompanying materials
+ # are made available under the terms of the Eclipse Public License v1.0
+ # which accompanies this distribution, and is available at
+ # http://www.eclipse.org/legal/epl-v10.html
+ # 
+ # Contributors:
+ #     Stephan Wahlbrink - initial API and implementation
+ #=============================================================================#
+-->
+
+<plugin>
+   
+   <extension-point id="de.walware.eutils.autonature.autoConfigurations" 
+         name="Auto Project Configurations"
+         schema="schema/de.walware.eutils.autonature.autoConfigurations.exsd"/>
+   
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="de.walware.eutils.autonature.internal.nostart.AutoNatureStartup">
+      </startup>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.keywords">
+      <keyword
+            id="de.walware.eutils.autonature.keywords.project"
+            label="project nature">
+      </keyword>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            id="de.walware.eutils.autonature.preferencePages.Config"
+            category="org.eclipse.ui.preferencePages.Workspace"
+            class="de.walware.eutils.autonature.internal.AutoNaturePreferencePage"
+            name="Auto Project Configuration">
+         <keywordReference
+               id="de.walware.eutils.autonature.keywords.project">
+         </keywordReference>
+      </page>
+   </extension>
+   
+</plugin>

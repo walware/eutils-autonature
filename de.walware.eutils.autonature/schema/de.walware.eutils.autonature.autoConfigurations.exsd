@@ -1,0 +1,102 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="de.walware.eutils.autonature" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appinfo>
+         <meta.schema plugin="de.walware.eutils.autonature"
+               id="de.walware.eutils.autonature.autoConfigurations"
+               name="Auto Project Configurations"/>
+      </appinfo>
+      <documentation>
+         This extension-point allows to define project configurations automatically performed
+         on the specified events.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
+      <complexType>
+         <choice minOccurs="1" maxOccurs="unbounded">
+            <element ref="onFileContent"/>
+         </choice>
+      </complexType>
+   </element>
+
+   <element name="onFileContent">
+      <annotation>
+         <documentation>
+            Performed if a file with the specified content type is changed.
+         </documentation>
+      </annotation>
+      <complexType>
+         <choice>
+            <element ref="ensureProjectNature" minOccurs="0" maxOccurs="unbounded"/>
+         </choice>
+         <attribute name="contentTypeId" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The id of the content type to handle.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier" basedOn="org.eclipse.core.contenttype.contentTypes/content-type/@id"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="enable" type="boolean">
+            <annotation>
+               <documentation>
+                  If the it should be enabled by default.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="ensureProjectNature">
+      <complexType>
+         <attribute name="natureId" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Installs the specified project nature, if it is missing.
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier" basedOn="org.eclipse.core.resources.natures/@id"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="since"/>
+      </appinfo>
+      <documentation>
+         0.1
+      </documentation>
+   </annotation>
+
+
+
+
+   <annotation>
+      <appinfo>
+         <meta.section type="copyright"/>
+      </appinfo>
+      <documentation>
+         Copyright (c) 2014 Stephan Wahlbrink (WalWare.de) and others.
+All rights reserved. This program and the accompanying materials
+are made available under the terms of the Eclipse Public License v1.0
+which accompanies this distribution, and is available at
+http://www.eclipse.org/legal/epl-v10.html
+
+Contributors:
+    Stephan Wahlbrink - initial API and implementation
+      </documentation>
+   </annotation>
+
+</schema>
