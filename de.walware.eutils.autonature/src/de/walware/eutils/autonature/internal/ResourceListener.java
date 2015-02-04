@@ -60,8 +60,9 @@ public class ResourceListener implements IResourceChangeListener, IResourceDelta
 				event.getDelta().accept(this);
 			}
 			catch (final CoreException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Activator.log(new Status(IStatus.ERROR, Activator.PLUGIN_ID, 0,
+						"An error occurred when checking for auto configuration tasks for changed resources.",
+						e ));
 			}
 			finally {
 				if (this.counter.decrementAndGet() == 0) {
