@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Vendor: WalWare.de
 Bundle-Name: Auto-Nature
 Bundle-SymbolicName: de.walware.eutils.autonature;singleton:=true
-Bundle-Version: 0.1.0.qualifier
+Bundle-Version: 0.1.1.qualifier
 Bundle-Activator: de.walware.eutils.autonature.internal.Activator
 Bundle-ActivationPolicy: lazy;exclude:="de.walware.eutils.autonature.internal.nostart"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7

@@ -2,7 +2,7 @@
 <feature
       id="de.walware.eutils.autonature"
       label="Auto Project Configuration"
-      version="0.1.0.qualifier"
+      version="0.1.1.qualifier"
       provider-name="WalWare.de"
       license-feature="de.walware.opensource.license"
       license-feature-version="1.0.0">
