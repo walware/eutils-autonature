@@ -20,6 +20,8 @@
          </appinfo>
       </annotation>
       <complexType>
+         <attribute name="point" type="string" use="required">
+         </attribute>
          <choice minOccurs="1" maxOccurs="unbounded">
             <element ref="onFileContent"/>
          </choice>
