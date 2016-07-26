@@ -66,6 +66,15 @@ public abstract class AutoConfig {
 		return true;
 	}
 	
+	public boolean isSupported(final byte mode) {
+		for (final Task task : this.tasks) {
+			if (!task.isSupported(mode)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	public abstract String getLabel();
 	
 	public List<Task> getTasks() {

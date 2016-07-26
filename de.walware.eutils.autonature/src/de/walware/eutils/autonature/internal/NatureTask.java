@@ -16,6 +16,9 @@ import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.SubMonitor;
+
+import de.walware.eutils.autonature.core.IProjectConfigurator;
 
 
 public class NatureTask extends Task {
@@ -64,6 +67,7 @@ public class NatureTask extends Task {
 		return (this.label != null);
 	}
 	
+	
 	public List<String> getRequiredNatureIds() {
 		return this.required;
 	}
@@ -96,8 +100,10 @@ public class NatureTask extends Task {
 	}
 	
 	@Override
-	public boolean isRequired(final IProject project) throws CoreException {
-		return !project.hasNature(this.natureId);
+	public byte check(final IProject project, final int flags, final SubMonitor m) throws CoreException {
+		return (project.hasNature(this.natureId)) ?
+				IProjectConfigurator.ALREADY_CONFIGURED :
+				IProjectConfigurator.CONFIGURABLE;
 	}
 	
 	

@@ -6,8 +6,13 @@ Bundle-SymbolicName: de.walware.eutils.autonature;singleton:=true
 Bundle-Version: 0.2.0.qualifier
 Bundle-Activator: de.walware.eutils.autonature.internal.Activator
 Bundle-ActivationPolicy: lazy;exclude:="de.walware.eutils.autonature.internal.nostart"
+Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.10.0",
  org.eclipse.ui,
  org.eclipse.core.resources
-Import-Package: com.ibm.icu.text
+Import-Package: com.ibm.icu.text,
+ de.walware.ecommons.ui.util,
+ de.walware.ecommons.workbench.ui,
+ de.walware.jcommons.collections
+Export-Package: de.walware.eutils.autonature.core

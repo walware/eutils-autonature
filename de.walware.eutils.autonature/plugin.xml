@@ -39,11 +39,66 @@
             id="de.walware.eutils.autonature.preferencePages.Config"
             category="org.eclipse.ui.preferencePages.Workspace"
             class="de.walware.eutils.autonature.internal.AutoNaturePreferencePage"
-            name="Auto Project Configuration">
+            name="%preferencePages_name">
          <keywordReference
                id="de.walware.eutils.autonature.keywords.project">
          </keywordReference>
       </page>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="de.walware.eutils.autonature.commands.DetectAndConfigureProject"
+            categoryId="org.eclipse.ui.category.project"
+            name="%commands_DetectAndConfigureProject_name">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            commandId="de.walware.eutils.autonature.commands.DetectAndConfigureProject"
+            class="de.walware.eutils.autonature.internal.wizards.ConfigureProjectHandler">
+         <activeWhen>
+            <with
+                  variable="activeMenuSelection">
+               <or>
+                  <and>
+                     <count
+                           value="1"/>
+                     <iterate>
+                        <adapt
+                              type="org.eclipse.core.resources.IProject"/>
+                     </iterate>
+                  </and>
+                  <and>
+                     <count
+                           value="!"/>
+                     <with
+                           variable="activeSelection">
+                        <count
+                              value="1"/>
+                        <iterate>
+                           <adapt
+                                 type="org.eclipse.core.resources.IProject"/>
+                        </iterate>
+                     </with>
+                  </and>
+               </or>
+            </with>
+         </activeWhen>
+      </handler>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="popup:org.eclipse.ui.projectConfigure">
+         <command
+               commandId="de.walware.eutils.autonature.commands.DetectAndConfigureProject"
+               style="push">
+         </command>
+      </menuContribution>
    </extension>
    
 </plugin>

@@ -44,12 +44,21 @@ public class ConfigManager implements IPreferenceChangeListener {
 	
 	static final String ON_FILE_CONTENT_CONTRIB= "onFileContent"; //$NON-NLS-1$
 	
+	private static final String LABEL_ATTR_NAME= "label"; //$NON-NLS-1$
+	static final String CLASS_ATTR_NAME= "class"; //$NON-NLS-1$
+	
 	private static final String CONTENT_TYPE_ID_ATTR_NAME= "contentTypeId"; //$NON-NLS-1$
 	private static final String ENABLE_ATTR_NAME= "enable"; //$NON-NLS-1$
+	
 	private static final String ENSURE_PROJECT_NATURE_ELEMENT_NAME= "ensureProjectNature"; //$NON-NLS-1$
+	private static final String RUN_PROJECT_CONFIGURATOR_ELEMENT_NAME= "runProjectConfigurator"; //$NON-NLS-1$
 	private static final String NATURE_ID_ATTR_NAME= "natureId"; //$NON-NLS-1$
 	
 	static final String PREF_QUALIFIER= Activator.PLUGIN_ID + "/configurations"; //$NON-NLS-1$
+	
+	public static final byte AUTO_MODE= 1;
+	public static final byte MANUAL_MODE= 2;
+	
 	
 	private static final AutoConfig DISABLED= new AutoConfig.Dummy("disabled");
 	
@@ -128,12 +137,29 @@ public class ConfigManager implements IPreferenceChangeListener {
 		final List<Task> tasks= new ArrayList<>(tasksElements.length);
 		for (int i= 0; i < tasksElements.length; i++) {
 			final IConfigurationElement taskElement= tasksElements[i];
-			if (taskElement.getName().equals(ENSURE_PROJECT_NATURE_ELEMENT_NAME)) {
-				final String natureId= taskElement.getAttribute(NATURE_ID_ATTR_NAME);
-				if (natureId == null || natureId.isEmpty()) {
+			switch (taskElement.getName()) {
+			case ENSURE_PROJECT_NATURE_ELEMENT_NAME: {
+					final String natureId= taskElement.getAttribute(NATURE_ID_ATTR_NAME);
+					if (natureId == null || natureId.isEmpty()) {
+						continue;
+					}
+					tasks.add(getNatureTask(natureId));
 					continue;
 				}
-				tasks.add(getNatureTask(natureId));
+			case RUN_PROJECT_CONFIGURATOR_ELEMENT_NAME: {
+					final String label= taskElement.getAttribute(LABEL_ATTR_NAME);
+					if (label == null || label.isEmpty()) {
+						continue;
+					}
+					final String className= taskElement.getAttribute(CLASS_ATTR_NAME);
+					if (className == null || className.isEmpty()) {
+						continue;
+					}
+					tasks.add(getConfiguratorTask(label, taskElement));
+					continue;
+				}
+			default:
+				continue;
 			}
 		}
 		checkTasks(tasks);
@@ -172,6 +198,11 @@ public class ConfigManager implements IPreferenceChangeListener {
 		return task;
 	}
 	
+	private ConfiguratorTask getConfiguratorTask(final String label, final IConfigurationElement taskElement) {
+		return new ConfiguratorTask(label, taskElement.getAttribute(NATURE_ID_ATTR_NAME),
+				taskElement );
+	}
+	
 	@Override
 	public synchronized void preferenceChange(final PreferenceChangeEvent event) {
 		if (this.updateJob == null) {
@@ -191,7 +222,7 @@ public class ConfigManager implements IPreferenceChangeListener {
 	}
 	
 	
-	public List<AutoConfig> getConfigs() {
+	public List<AutoConfig> getConfigs(final byte mode) {
 		ArrayList<AutoConfig> list;
 		this.lock.readLock().lock();
 		try {
@@ -202,7 +233,7 @@ public class ConfigManager implements IPreferenceChangeListener {
 		}
 		for (final Iterator<AutoConfig> iter= list.iterator(); iter.hasNext();) {
 			final AutoConfig config= iter.next();
-			if (!config.isAvailable()) {
+			if (!(config.isAvailable() && config.isSupported(mode))) {
 				iter.remove();
 			}
 		}
@@ -219,13 +250,13 @@ public class ConfigManager implements IPreferenceChangeListener {
 		}
 	}
 	
-	public AutoConfig getConfig(IContentType contentType) {
+	public AutoConfig getConfig(IContentType contentType, final byte mode) {
 		this.lock.readLock().lock();
 		try {
 			while (contentType != null) {
-				final AutoConfig list= this.activeContentTasks.get(contentType.getId());
-				if (list != null) {
-					return (list != DISABLED) ? list : null;
+				final AutoConfig config= this.activeContentTasks.get(contentType.getId());
+				if (config != null && config.isSupported(mode)) {
+					return (config != DISABLED) ? config : null;
 				}
 				contentType= contentType.getBaseType();
 			}

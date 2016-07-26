@@ -27,7 +27,9 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.core.runtime.content.IContentType;
 import org.eclipse.osgi.util.NLS;
@@ -98,7 +100,7 @@ public class ResourceListener implements IResourceChangeListener, IResourceDelta
 			if (contentType == null) {
 				return;
 			}
-			final AutoConfig config= this.configManager.getConfig(contentType);
+			final AutoConfig config= this.configManager.getConfig(contentType, ConfigManager.AUTO_MODE);
 			if (config != null) {
 				addTasks(file.getProject(), config);
 			}
@@ -126,22 +128,9 @@ public class ResourceListener implements IResourceChangeListener, IResourceDelta
 		for (final Entry<IProject, List<AutoConfig>> entry : this.projectConfigs.entrySet()) {
 			final IProject project= entry.getKey();
 			try {
-				for (final AutoConfig config : entry.getValue()) {
-					if (config.isAvailable()) {
-						for (final Task task : config.getTasks()) {
-							if (tasks.isEmpty()) {
-								if (task.isRequired(project)) {
-									tasks.add(task);
-								}
-							}
-							else {
-								if (!tasks.contains(task)) {
-									tasks.add(task);
-								}
-							}
-						}
-					}
-				}
+				TaskProcessor.aggregateTasks(project, entry.getValue(), Task.CONTENT_MATCH,
+						tasks, null, null,
+						SubMonitor.convert(new NullProgressMonitor()) );
 				
 				if (!tasks.isEmpty()) {
 					this.taskProcessor.add(project, tasks);

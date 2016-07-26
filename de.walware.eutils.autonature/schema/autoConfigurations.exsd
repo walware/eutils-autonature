@@ -20,11 +20,16 @@
          </appinfo>
       </annotation>
       <complexType>
-         <attribute name="point" type="string" use="required">
-         </attribute>
          <choice minOccurs="1" maxOccurs="unbounded">
             <element ref="onFileContent"/>
          </choice>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
@@ -37,6 +42,7 @@
       <complexType>
          <choice>
             <element ref="ensureProjectNature" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="runProjectConfigurator" minOccurs="0" maxOccurs="unbounded"/>
          </choice>
          <attribute name="contentTypeId" type="string" use="required">
             <annotation>
@@ -59,11 +65,56 @@
    </element>
 
    <element name="ensureProjectNature">
+      <annotation>
+         <documentation>
+            Installs the specified project nature, if it is missing.
+         </documentation>
+      </annotation>
       <complexType>
          <attribute name="natureId" type="string" use="required">
             <annotation>
                <documentation>
-                  Installs the specified project nature, if it is missing.
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="identifier" basedOn="org.eclipse.core.resources.natures/@id"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="runProjectConfigurator">
+      <annotation>
+         <documentation>
+            Asks the specified project configurator whether/to configure the project.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="label" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":de.walware.eutils.autonature.IProjectConfigurator"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="natureId" type="string">
+            <annotation>
+               <documentation>
+                  
                </documentation>
                <appinfo>
                   <meta.attribute kind="identifier" basedOn="org.eclipse.core.resources.natures/@id"/>
